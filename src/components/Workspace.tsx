@@ -139,7 +139,7 @@ export const Workspace: React.FC<WorkspaceProps> = ({
   }
 
   return (
-    <div className="max-w-[1360px] mx-auto p-4 sm:p-6 md:p-8 space-y-6">
+    <div className="workspace-shell max-w-[1360px] mx-auto p-4 sm:p-6 md:p-8 space-y-8">
       {/* 01. Compact Research Document Masthead & Actions */}
       <section className="bg-[#FFFDF9] border border-[#E6CBBD] p-5 sm:p-6 space-y-4 shadow-xs rounded-xs">
         {/* Source Metadata Banner */}
