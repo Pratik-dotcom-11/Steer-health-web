@@ -914,7 +914,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5EFE6] text-[#391E1D] flex">
+    <div className="app-shell min-h-screen text-[#391E1D] flex">
       {/* 01. LEFT: Persistent Desktop Navigation Rail (228px) */}
       <NavigationSidebar
         currentTab={currentTab}
