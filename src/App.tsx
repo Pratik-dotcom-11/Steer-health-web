@@ -39,8 +39,9 @@ import {
   saveDeliverableToSql,
   seedDemoToSql,
 } from './utils/sqlApiClient';
-import { NavigationSidebar, ActiveTab } from './components/NavigationSidebar';
-import { TopBar } from './components/TopBar';
+import { ActiveTab } from './components/NavigationSidebar';
+import { NavigationDrawer } from './components/NavigationDrawer';
+import { AppHeader } from './components/AppHeader';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { ContextInspector } from './components/ContextInspector';
 import { Workspace } from './components/Workspace';
@@ -914,78 +915,35 @@ export default function App() {
   };
 
   return (
-    <div className="app-shell min-h-screen text-[#391E1D] flex">
-      {/* 01. LEFT: Persistent Desktop Navigation Rail (228px) */}
-      <NavigationSidebar
+    <div className="app-shell min-h-screen text-[#261f1a]">
+      <NavigationDrawer
+        open={isMobileSidebarOpen}
+        onClose={() => setIsMobileSidebarOpen(false)}
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
         activePaper={activePaper}
         papers={papers}
         onSwitchPaper={handleSwitchPaper}
-        approvedClaimsCount={approvedClaims.length}
-        totalClaimsCount={currentPaperClaims.length}
-        flaggedClaimsCount={flaggedClaims.length}
-        sqlSyncStatus={sqlSyncStatus}
-        onOpenDemo={handleResetDemo}
-        isOpenMobile={isMobileSidebarOpen}
-        onCloseMobile={() => setIsMobileSidebarOpen(false)}
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
       />
 
-      {/* Mobile Sidebar Backdrop Overlay */}
-      {isMobileSidebarOpen && (
-        <div
-          onClick={() => setIsMobileSidebarOpen(false)}
-          className="fixed inset-0 z-30 bg-[#391E1D]/40 md:hidden"
-        />
-      )}
-
-      {/* 02. CENTER & RIGHT: Main Workstation Area (offset by 228px on desktop) */}
-      <div className="flex-1 md:ml-[228px] flex flex-col min-h-screen min-w-0">
-        {/* Top Header Bar across canvas */}
-        <TopBar
+      <div className="flex min-h-screen min-w-0 flex-col">
+        <AppHeader
           currentTab={currentTab}
-          onSelectTab={setCurrentTab}
           activePaper={activePaper}
-          onToggleSidebarMobile={() => setIsMobileSidebarOpen(true)}
+          onOpenMenu={() => setIsMobileSidebarOpen(true)}
           isInspectorOpen={isInspectorOpen}
           onToggleInspector={() => setIsInspectorOpen(!isInspectorOpen)}
-          sqlSyncStatus={sqlSyncStatus}
-          quickActionLabel={
-            currentTab === 'radar'
-              ? 'Content Studio →'
-              : currentTab === 'papers'
-              ? 'Doctor Review Gate →'
-              : currentTab === 'review' || currentTab === 'desk' || currentTab === 'provenance'
-              ? 'Content Studio →'
-              : currentTab === 'studio'
-              ? '7-Day Calendar →'
-              : currentTab === 'schedule'
-              ? 'Pitch Packet →'
-              : currentTab === 'submission'
-              ? 'Content Studio'
-              : undefined
-          }
-          onQuickAction={
-            currentTab === 'radar'
-              ? () => setCurrentTab('studio')
-              : currentTab === 'papers'
-              ? () => setCurrentTab('review')
-              : currentTab === 'review' || currentTab === 'desk' || currentTab === 'provenance'
-              ? () => setCurrentTab('studio')
-              : currentTab === 'studio'
-              ? () => setCurrentTab('schedule')
-              : currentTab === 'schedule'
-              ? () => setCurrentTab('submission')
-              : currentTab === 'submission'
-              ? () => setCurrentTab('studio')
-              : undefined
-          }
           onOpenAuthModal={() => setIsAuthModalOpen(true)}
-          onOpenSimulator={() => setIsSimulatorOpen(true)}
+          sqlSyncStatus={sqlSyncStatus}
+          onQuickAction={
+            currentTab === 'radar' || currentTab === 'desk' || currentTab === 'provenance' ? () => setCurrentTab('studio') :
+            currentTab === 'studio' ? () => setCurrentTab('schedule') :
+            currentTab === 'schedule' ? () => setCurrentTab('submission') : undefined
+          }
         />
 
-        {/* 03. Split Work Canvas: Center Content + Right Contextual Inspector */}
+        {/* Main content canvas with contextual inspector */}
         <div className="flex-1 flex overflow-hidden">
           {/* CENTER: The Dominant Working Canvas */}
           <main className="flex-1 min-w-0 overflow-y-auto pb-16">
